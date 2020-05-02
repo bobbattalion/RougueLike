@@ -1,31 +1,23 @@
 import pygame
+import ctypes
 
 import BSP
 import player
 import gun
 import draw
 
-WHITE = (255, 255, 255)
-BLACK = (0, 0, 0)
-CYAN = (0, 255, 255)
-RED = (255, 0, 0)
-GREEN = (0, 255, 0)
-BLUE = (0, 0, 255)
-PURPLE = (255, 0, 255)
-YELLOW = (255, 255, 0)
-GREY = (128, 128, 128)
-ORANGE = (255, 165, 0)
-BROWN = (150, 75, 0)
-BEIGE = (150, 120, 45)
+user32 = ctypes.windll.user32
 
-width = 640
-height = 480
+owidth, oheight = int(user32.GetSystemMetrics(0) / 2), int(user32.GetSystemMetrics(1) / 2)
+width, height = owidth, oheight
+
+visibletilesx = width / 32
+visibletilesy = height / 32
 
 pygame.init()
 pygame.mouse.set_cursor((8,8),(0,0),(0,0,0,0,0,0,0,0),(0,0,0,0,0,0,0,0))
-win = pygame.display.set_mode((width, height))
-pygame.display.set_caption("ROUGUE LIKE I GUESS")
-
+win = pygame.display.set_mode((width, height), 16)
+pygame.display.set_caption("RogueLike")
 
 cursor = pygame.image.load("cursor.png")
 ammoback = pygame.image.load("ammoborder.png")
@@ -46,9 +38,6 @@ def getTile(x, y):
 
     else:
         return 0
-
-visibletilesx = 20
-visibletilesy = 15
 
 tilewidth = int(width / visibletilesx)
 tileheight = int(height / visibletilesy)
@@ -77,8 +66,8 @@ render.initImages()
 run = True
 clock = pygame.time.Clock()
 while(run):
-    elapsedtime = clock.tick(60)/33
-    win.fill(BLACK)
+    elapsedtime = clock.tick(30)/33
+    win.fill(draw.BLACK)
 
     playerx, playery = p1.update(elapsedtime)
     cameraposx, cameraposy = p1.setCamera(cameraoffsetx, cameraoffsety)
@@ -94,6 +83,24 @@ while(run):
         if(event.type == pygame.QUIT):
             run = False
 
+        if(event.type == pygame.VIDEORESIZE):
+            width, height = event.w, event.h
+            win = pygame.display.set_mode((width, height), 16)
+
+            widthmod = width / owidth
+            heightmod = height / oheight
+
+            tilewidth = int(width / visibletilesx)
+            tileheight = int(height / visibletilesy)
+
+            visibletilesx = width / (32 * widthmod)
+            visibletilesy = height / (32 * heightmod)
+
+            p1.tilewidth = (32 * widthmod)
+            p1.tileheight = (32 * heightmod)
+
+            render = draw.Render(level, tilewidth, tileheight)
+
     #################HUD###################
     mousepos = pygame.mouse.get_pos()
     win.blit(cursor, (mousepos[0] - 16, mousepos[1] - 16))
@@ -101,9 +108,9 @@ while(run):
     ammoout = "Ammo: " + str(p1.gun.ammo) + "/" + str(p1.gun.maxammo)
     if(p1.gun.reload):
         ammoout = ammoout + "↑"
-    ammosurface = hudfont.render(ammoout, False, WHITE)
+    ammosurface = hudfont.render(ammoout, False, draw.WHITE)
     win.blit(ammoback, (width - 145, 0))
-    win.blit(ammosurface, (width - 140, 3))
+    win.blit(ammosurface, (width - 137, 3))
 
     pygame.display.update()
 

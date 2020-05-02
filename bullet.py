@@ -51,4 +51,4 @@ class Bullet():
 
     def drawBullet(self, win, tilewidth, tileheight, cameraposx, cameraposy):
         if(self.show):
-            pygame.draw.circle(win, (255, 255, 0), (int(self.x * tilewidth - cameraposx * tilewidth), int(self.y * tileheight - cameraposy * tileheight)), 10)
+            pygame.draw.circle(win, (255, 255, 0), (int(self.x * tilewidth - cameraposx * tilewidth), int(self.y * tileheight - cameraposy * tileheight)), 10 * int(tilewidth / 32))
