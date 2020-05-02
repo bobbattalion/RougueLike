@@ -77,10 +77,10 @@ render.initImages()
 run = True
 clock = pygame.time.Clock()
 while(run):
-    clock.tick(30)
+    elapsedtime = clock.tick(60)/33
     win.fill(BLACK)
 
-    playerx, playery = p1.update()
+    playerx, playery = p1.update(elapsedtime)
     cameraposx, cameraposy = p1.setCamera(cameraoffsetx, cameraoffsety)
 
     camerarangex = int(width / tilewidth) + cameraposx
@@ -88,7 +88,7 @@ while(run):
 
     render.drawLevel(cameraposx, cameraposy, camerarangex, camerarangey, p1, win)
 
-    p1.shoot(win)
+    p1.shoot(win, elapsedtime)
 
     for event in pygame.event.get():
         if(event.type == pygame.QUIT):

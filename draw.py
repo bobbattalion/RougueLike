@@ -55,4 +55,4 @@ class Render():
                     else:
                         pygame.draw.rect(win, BLACK, (x * self.tilewidth - cameraposx * self.tilewidth, y * self.tileheight - cameraposy * self.tileheight, self.tilewidth, self.tileheight))
 
-        player.drawPlayer(win, cameraposx, cameraposy)
+        player.drawPlayer(win)#, cameraposx, cameraposy)

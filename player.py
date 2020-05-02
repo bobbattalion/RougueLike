@@ -36,13 +36,13 @@ class Player():
         self.gun2 = gun2
         self.gun = gun1
 
-    def shoot(self, win):
+    def shoot(self, win, elapsedtime):
         self.gun.shoot(win, self.x, self.y, self.cameraposx, self.cameraposy, self.level, self.tilewidth, self.tileheight)
-        self.gun1.updateBullets(win, self.tilewidth, self.tileheight, self.cameraposx, self.cameraposy)
-        self.gun2.updateBullets(win, self.tilewidth, self.tileheight, self.cameraposx, self.cameraposy)
+        self.gun1.updateBullets(win, self.tilewidth, self.tileheight, self.cameraposx, self.cameraposy, elapsedtime)
+        self.gun2.updateBullets(win, self.tilewidth, self.tileheight, self.cameraposx, self.cameraposy, elapsedtime)
 
-    def drawPlayer(self, win, cameraposx, cameraposy):
-        pygame.draw.rect(win, (0, 255, 0), (self.x * self.tilewidth - cameraposx * self.tilewidth, self.y * self.tileheight - cameraposy * self.tileheight, self.tilewidth, self.tileheight))
+    def drawPlayer(self, win): #cameraposx, cameraposy):
+        pygame.draw.rect(win, (0, 255, 0), (self.x * self.tilewidth - self.cameraposx * self.tilewidth, self.y * self.tileheight -self.cameraposy * self.tileheight, self.tilewidth, self.tileheight))
 
     def setCamera(self, cameraoffsetx, cameraoffsety):
         cameraposx = self.x - cameraoffsetx
@@ -68,23 +68,23 @@ class Player():
 
         return cameraposx, cameraposy
 
-    def update(self):
+    def update(self, elapsedtime):
         keys = pygame.key.get_pressed()
 
         playervely = 0
         playervelx = 0
 
         if(keys[pygame.K_w]):
-            playervely = -self.pspeed
+            playervely = -self.pspeed * elapsedtime
 
         if(keys[pygame.K_s]):
-            playervely = self.pspeed
+            playervely = self.pspeed * elapsedtime
 
         if(keys[pygame.K_a]):
-            playervelx = -self.pspeed
+            playervelx = -self.pspeed * elapsedtime
 
         if(keys[pygame.K_d]):
-            playervelx = self.pspeed
+            playervelx = self.pspeed * elapsedtime
 
         newplayerx = self.x + playervelx
         newplayery = self.y + playervely

@@ -36,10 +36,10 @@ class Bullet():
         self.frames = 240
         self.show = True
 
-    def updateBullet(self):
+    def updateBullet(self, elapsedtime):
         if(self.show):
-            self.x = self.x + self.speedx
-            self.y = self.y + self.speedy
+            self.x = self.x + (self.speedx * elapsedtime)
+            self.y = self.y + (self.speedy * elapsedtime)
 
             if(getTile(self.x, self.y, self.level) != 0):
                 self.show = False

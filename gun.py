@@ -15,10 +15,10 @@ class Gun():
         self.speed = speed
         self.bshot = bulletspershot
 
-    def updateBullets(self, win, tilewidth, tileheight, cameraposx, cameraposy):
+    def updateBullets(self, win, tilewidth, tileheight, cameraposx, cameraposy, elapsedtime):
         delete = []
         for i in range(len(self.bullets)):
-            self.bullets[i].updateBullet()
+            self.bullets[i].updateBullet(elapsedtime)
             self.bullets[i].drawBullet(win, tilewidth, tileheight, cameraposx, cameraposy)
             if(self.bullets[i].show == False):
                 delete.append(i)
